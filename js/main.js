@@ -1,15 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- INICIO: Lógica del contador (antes en script.js) ---
-    // Define la fecha y hora objetivo.
-    const targetDate = new Date('2031-06-17T17:00:00').getTime(); // ¡CAMBIA ESTA FECHA Y HORA!
+    // --- INICIO: Lógica del contador ---
+    const countdownContainer = document.getElementById('countdown');
+    const messageElement = document.getElementById('countdown-message');
+    const originalTitle = document.title; // Guardar el título original
+
+    if (!countdownContainer) return; // Salir si el elemento principal no existe.
+
+    // Obtener la fecha objetivo desde el atributo data- en el HTML
+    const targetDateString = countdownContainer.dataset.targetDate;
+    if (!targetDateString) {
+        console.error('Error: El atributo data-target-date no está definido en el elemento #countdown.');
+        countdownContainer.style.display = 'none';
+        if (messageElement) messageElement.textContent = 'Error de configuración.';
+        return; // Detener la ejecución si no hay fecha
+    }
+
+    const targetDate = new Date(targetDateString).getTime();
 
     // Obtener los elementos HTML
     const daysElement = document.getElementById('days');
     const hoursElement = document.getElementById('hours');
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
-    const messageElement = document.getElementById('countdown-message');
-    const countdownContainer = document.getElementById('countdown');
 
     function updateCountdown() {
         const now = new Date().getTime();
@@ -22,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageElement.textContent = '¡El momento ha llegado! ¡Celebremos!';
                 messageElement.style.color = '#ffcc00';
             }
+            document.title = '¡Llegó el día! | ' + originalTitle;
             return;
         }
 
@@ -29,6 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Actualizar el título de la página dinámicamente
+        const fHours = String(hours).padStart(2, '0');
+        const fMinutes = String(minutes).padStart(2, '0');
+        const fSeconds = String(seconds).padStart(2, '0');
+        document.title = `${days}d ${fHours}h ${fMinutes}m ${fSeconds}s | ${originalTitle}`;
 
         function updateAndAnimate(element, newValue) {
             // Salir si el elemento no existe en la página
@@ -53,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Iniciar el contador
     const countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown(); // Llamada inicial para evitar el retraso de 1s
-    // --- FIN: Lógica del contador ---
+    // --- FIN: Lógica del contador ---    
 
     // --- INICIO: Lógica de compartir (antes en share.js) ---
     const copyBtn = document.getElementById('copyLinkBtn');
