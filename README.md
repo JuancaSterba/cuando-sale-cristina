@@ -4,7 +4,7 @@
 
 Un sencillo pero elegante sitio web que muestra una cuenta regresiva para la fecha en que se cumple la condena de Cristina Fernández de Kirchner por la Causa Vialidad.
 
-**Visita el sitio en vivo:** [cuandosale.cristina.com](https://cuandosale.cristina.com/)
+**Visita el sitio en vivo:** [cuandosalecristina.com](https://cuandosalecristina.com/)
 
 ---
 
