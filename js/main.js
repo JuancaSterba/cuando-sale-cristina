@@ -31,12 +31,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
     const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
 
     function updateCountdown() {
         const now = new Date().getTime();
         const distance = targetDate - now;
 
         if (distance < 0) {
+            if (progressText) progressText.textContent = '100.00%';
             if (progressBar) progressBar.style.width = '100%'; // Llenar la barra al llegar a cero
             clearInterval(countdownInterval);
             if (countdownContainer) countdownContainer.style.display = 'none';
@@ -85,6 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Asegurar que el porcentaje esté entre 0 y 100
             progressPercentage = Math.max(0, Math.min(100, progressPercentage));
             progressBar.style.width = progressPercentage + '%';
+            if (progressText) {
+                progressText.textContent = progressPercentage.toFixed(2) + '%';
+            }
         }
     }
 

@@ -99,6 +99,7 @@ p {
 
 /* --- Estilos para la barra de progreso --- */
 .progress-bar-container {
+    position: relative; /* Necesario para posicionar el texto encima */
     width: 100%;
     background-color: #495057;
     border-radius: 10px;
@@ -114,6 +115,19 @@ p {
     background-color: #a0f0a0;
     border-radius: 10px;
     transition: width 1s ease-out; /* Transición suave al actualizar */
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #282c34; /* Color oscuro para buen contraste con la barra verde claro */
+    font-size: 0.75em;
+    font-weight: bold;
+    line-height: 1;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.2); /* Sutil brillo para legibilidad */
+    z-index: 2; /* Asegura que el texto esté por encima de la barra */
 }
 
 /* Adaptabilidad para pantallas más pequeñas */
