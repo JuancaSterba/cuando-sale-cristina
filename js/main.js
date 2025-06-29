@@ -98,4 +98,19 @@ document.addEventListener('DOMContentLoaded', function() {
         whatsappBtn.href = isMobile ? `https://api.whatsapp.com/send?text=${encodedText}` : `https://web.whatsapp.com/send?text=${encodedText}`;
     }
     // --- FIN: Lógica de compartir ---
+
+    // --- INICIO: Lógica de fondo dinámico ---
+    const backgroundColors = [
+        '#282c34',
+        '#34282c',
+        '#283430',
+        '#2c2834'
+    ];
+    let colorIndex = 0;
+
+    setInterval(() => {
+        colorIndex = (colorIndex + 1) % backgroundColors.length;
+        document.body.style.backgroundColor = backgroundColors[colorIndex];
+    }, 20000); // Cambia de color cada 20 segundos para un efecto sutil
+    // --- FIN: Lógica de fondo dinámico ---
 });

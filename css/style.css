@@ -5,6 +5,7 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    transition: background-color 5s ease-in-out; /* Transición suave para el cambio de color */
     background-color: #282c34; /* Fondo oscuro agradable */
     color: #f0f0f0; /* Texto claro */
     text-align: center;
