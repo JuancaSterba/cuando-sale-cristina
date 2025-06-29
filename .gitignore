@@ -1,0 +1,16 @@
+# Archivos de configuración local que pueden contener secretos.
+# Por ejemplo, si creas un archivo para tus credenciales de DB.
+config.php
+*.env
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de editores de código
+.vscode/
+.idea/
+
+# Dependencias de Node (en caso de que las uses en el futuro)
+node_modules/
+npm-debug.log
