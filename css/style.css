@@ -97,6 +97,25 @@ p {
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
+/* --- Estilos para la barra de progreso --- */
+.progress-bar-container {
+    width: 100%;
+    background-color: #495057;
+    border-radius: 10px;
+    margin-top: 40px;
+    height: 18px;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.4);
+    overflow: hidden; /* Asegura que la barra interior no se salga */
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%; /* Se actualiza con JS */
+    background-color: #a0f0a0;
+    border-radius: 10px;
+    transition: width 1s ease-out; /* Transición suave al actualizar */
+}
+
 /* Adaptabilidad para pantallas más pequeñas */
 @media (max-width: 768px) {
     .container {

@@ -15,19 +15,29 @@ document.addEventListener('DOMContentLoaded', function() {
         return; // Detener la ejecución si no hay fecha
     }
 
+    const startDateString = countdownContainer.dataset.startDate;
+    if (!startDateString) {
+        console.error('Error: El atributo data-start-date no está definido en el elemento #countdown.');
+        // No detenemos la ejecución, el contador puede funcionar sin la barra de progreso.
+    }
+
     const targetDate = new Date(targetDateString).getTime();
+    const startDate = startDateString ? new Date(startDateString).getTime() : new Date().getTime();
+    const totalDuration = targetDate - startDate;
 
     // Obtener los elementos HTML
     const daysElement = document.getElementById('days');
     const hoursElement = document.getElementById('hours');
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
+    const progressBar = document.getElementById('progress-bar');
 
     function updateCountdown() {
         const now = new Date().getTime();
         const distance = targetDate - now;
 
         if (distance < 0) {
+            if (progressBar) progressBar.style.width = '100%'; // Llenar la barra al llegar a cero
             clearInterval(countdownInterval);
             if (countdownContainer) countdownContainer.style.display = 'none';
             if (messageElement) {
@@ -67,6 +77,15 @@ document.addEventListener('DOMContentLoaded', function() {
         updateAndAnimate(hoursElement, hours);
         updateAndAnimate(minutesElement, minutes);
         updateAndAnimate(secondsElement, seconds);
+
+        // Actualizar la barra de progreso
+        if (progressBar && totalDuration > 0) {
+            const elapsed = now - startDate;
+            let progressPercentage = (elapsed / totalDuration) * 100;
+            // Asegurar que el porcentaje esté entre 0 y 100
+            progressPercentage = Math.max(0, Math.min(100, progressPercentage));
+            progressBar.style.width = progressPercentage + '%';
+        }
     }
 
     // Iniciar el contador
