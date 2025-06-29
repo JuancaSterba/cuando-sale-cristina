@@ -5,6 +5,7 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    transition: background-color 5s ease-in-out; /* Transición suave para el cambio de color */
     background-color: #282c34; /* Fondo oscuro agradable */
     color: #f0f0f0; /* Texto claro */
     text-align: center;
@@ -96,6 +97,39 @@ p {
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
+/* --- Estilos para la barra de progreso --- */
+.progress-bar-container {
+    position: relative; /* Necesario para posicionar el texto encima */
+    width: 100%;
+    background-color: #495057;
+    border-radius: 10px;
+    margin-top: 40px;
+    height: 18px;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.4);
+    overflow: hidden; /* Asegura que la barra interior no se salga */
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%; /* Se actualiza con JS */
+    background-color: #a0f0a0;
+    border-radius: 10px;
+    transition: width 1s ease-out; /* Transición suave al actualizar */
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #282c34; /* Color oscuro para buen contraste con la barra verde claro */
+    font-size: 0.75em;
+    font-weight: bold;
+    line-height: 1;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.2); /* Sutil brillo para legibilidad */
+    z-index: 2; /* Asegura que el texto esté por encima de la barra */
+}
+
 /* Adaptabilidad para pantallas más pequeñas */
 @media (max-width: 768px) {
     .container {
@@ -149,4 +183,49 @@ p {
 .cafecito-button-container img {
     max-width: 220px; /* Ajusta el tamaño máximo si es necesario, el botón de cafecito suele ser responsivo */
     height: auto;
+}
+
+/* --- Estilos para botones de compartir --- */
+.share-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+    transition: transform 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.share-btn:hover {
+    transform: scale(1.1);
+}
+
+.share-btn.facebook { background-color: #1877F2; }
+.share-btn.twitter { background-color: #1DA1F2; }
+.share-btn.whatsapp { background-color: #25D366; }
+.share-btn.copy-link { background-color: #6c757d; }
+
+#copy-message {
+    margin-top: 15px;
+    height: 1.2em; /* Evita que el layout salte */
+    color: #a0f0a0;
+    font-weight: normal;
+    font-size: 1em;
 }
