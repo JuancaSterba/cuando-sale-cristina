@@ -4,30 +4,20 @@ header('Content-Type: application/json');
 require_once 'config.php';
 
 // --- INICIO: Lógica de conteo de visitas únicas ---
-$visitor_ip = $_SERVER['REMOTE_ADDR'];
-$visitor_hashed_ip = hash('sha256', $visitor_ip . IP_HASH_SALT);
+try {
+    $visitor_ip = $_SERVER['REMOTE_ADDR'];
+    $visitor_hashed_ip = hash('sha256', $visitor_ip . IP_HASH_SALT);
+    $today = date('Y-m-d');
 
-// Verificamos si este visitante ya ha sido contado
-$stmt_check_visitor = $conn->prepare("SELECT hashed_ip FROM unique_visitors WHERE hashed_ip = ?");
-$stmt_check_visitor->bind_param("s", $visitor_hashed_ip);
-$stmt_check_visitor->execute();
-$result_visitor = $stmt_check_visitor->get_result();
-
-if ($result_visitor->num_rows === 0) {
-    // Es un visitante nuevo. Lo registramos y actualizamos el contador.
-    $conn->begin_transaction();
-    try {
-        // 1. Insertar el hash del visitante para no volver a contarlo
-        $stmt_insert_visitor = $conn->prepare("INSERT INTO unique_visitors (hashed_ip) VALUES (?)");
-        $stmt_insert_visitor->bind_param("s", $visitor_hashed_ip);
-        $stmt_insert_visitor->execute();
-
-        // 2. Incrementar el contador general de visitas
-        $conn->query("UPDATE site_stats SET stat_value = stat_value + 1 WHERE stat_name = 'unique_visits'");
-        $conn->commit();
-    } catch (Exception $e) {
-        $conn->rollback(); // Si algo falla, revertimos para mantener la consistencia
-    }
+    // Intentamos insertar el visitante de hoy.
+    // INSERT IGNORE no dará error si la clave (visit_date, hashed_ip) ya existe.
+    // Esto es atómico, seguro y muy eficiente.
+    $stmt_visitor = $conn->prepare("INSERT IGNORE INTO daily_visitor_log (visit_date, hashed_ip) VALUES (?, ?)");
+    $stmt_visitor->bind_param("ss", $today, $visitor_hashed_ip);
+    $stmt_visitor->execute();
+} catch (Exception $e) {
+    // En caso de un error inesperado, lo registramos pero no detenemos la ejecución.
+    error_log('Error en el conteo de visitas diarias: ' . $e->getMessage());
 }
 // --- FIN: Lógica de conteo de visitas únicas ---
  
