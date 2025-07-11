@@ -131,6 +131,22 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Función para enviar eventos de 'share' (compartir)
+            const apiEndpoint = './api/track_event.php';
+
+            // Nueva función para registrar eventos en nuestra propia base de datos
+            async function trackInternalEvent(eventName) {
+                try {
+                    // Es una llamada de "disparar y olvidar", no necesitamos procesar la respuesta.
+                    await fetch(apiEndpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ event_name: eventName })
+                    });
+                } catch (error) {
+                    console.error(`Error al registrar el evento '${eventName}':`, error);
+                }
+            }
+
             const trackShare = (method) => {
                 if (typeof gtag === 'function') {
                     gtag('event', 'share', { method: method });
@@ -146,13 +162,28 @@
             };
 
             // Asignar eventos a los botones de compartir
-            document.querySelector('.share-btn.facebook')?.addEventListener('click', () => trackShare('Facebook'));
-            document.querySelector('.share-btn.twitter')?.addEventListener('click', () => trackShare('Twitter'));
-            document.querySelector('.share-btn.whatsapp')?.addEventListener('click', () => trackShare('WhatsApp'));
-            document.getElementById('copyLinkBtn')?.addEventListener('click', () => trackShare('Copy Link'));
+            document.querySelector('.share-btn.facebook')?.addEventListener('click', () => {
+                trackShare('Facebook');
+                trackInternalEvent('share_facebook');
+            });
+            document.querySelector('.share-btn.twitter')?.addEventListener('click', () => {
+                trackShare('Twitter');
+                trackInternalEvent('share_twitter');
+            });
+            document.querySelector('.share-btn.whatsapp')?.addEventListener('click', () => {
+                trackShare('WhatsApp');
+                trackInternalEvent('share_whatsapp');
+            });
+            document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
+                trackShare('Copy Link');
+                trackInternalEvent('share_copy_link');
+            });
 
             // Asignar evento al botón de Cafecito
-            document.querySelector('.cafecito-button-container a')?.addEventListener('click', () => trackSupportClick('cafecito'));
+            document.querySelector('.cafecito-button-container a')?.addEventListener('click', () => {
+                trackSupportClick('cafecito');
+                trackInternalEvent('click_cafecito');
+            });
         });
     </script>
 </body>
