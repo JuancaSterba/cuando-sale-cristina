@@ -153,6 +153,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
             if (data.success) {
                 likeCountSpan.textContent = data.count.toLocaleString('es');
+                // El servidor nos dice si el usuario ya ha votado.
+                if (data.userHasLiked) {
+                    likeBtn.disabled = true;
+                    likeBtn.classList.add('liked');
+                }
             }
         } catch (error) {
             console.error("Error al obtener los likes:", error);
@@ -174,8 +179,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
             if (data.success) {
                 likeCountSpan.textContent = data.count.toLocaleString('es');
-                // Guardamos en el navegador que el usuario ya dio like para no dejarle dar de nuevo
-                localStorage.setItem('userHasLiked', 'true');
             }
         } catch (error) {
             console.error("Error al enviar el like:", error);
@@ -185,14 +188,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Verificamos si el usuario ya dio like en una visita anterior
-    if (localStorage.getItem('userHasLiked') === 'true') {
-        likeBtn.disabled = true;
-        likeBtn.classList.add('liked');
-    } else {
-        likeBtn.addEventListener('click', handleLike);
-    }
-
+    // El botón siempre escucha el clic. El servidor decidirá si hacer algo o no.
+    likeBtn.addEventListener('click', handleLike);
     // Cargamos el contador de likes al iniciar
     getInitialLikes();
     // --- FIN: Lógica de Likes ---
