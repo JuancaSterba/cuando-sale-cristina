@@ -26,9 +26,12 @@ try {
     // Si todo fue bien, confirmamos los cambios
     $conn->commit();
     echo json_encode(['success' => true, 'count' => (int)$row['count']]);
-} else {
+} catch (Throwable $e) { // Se usa "catch" para capturar cualquier error o excepción
     $conn->rollback(); // Si algo falla, revertimos los cambios
     http_response_code(500);
+    // Es una buena práctica registrar el error real para poder depurarlo,
+    // pero sin mostrarlo al usuario final.
+    // error_log('Error en increment_count.php: ' . $e->getMessage());
     echo json_encode(['success' => false, 'message' => 'Error al incrementar el contador.']);
 }
 
