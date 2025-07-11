@@ -14,3 +14,6 @@ Thumbs.db
 # Dependencias de Node (en caso de que las uses en el futuro)
 node_modules/
 npm-debug.log
+
+# Archivo de configuración con credenciales. ¡NUNCA SUBIR!
+api/config.php

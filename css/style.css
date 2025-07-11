@@ -229,3 +229,39 @@ p {
     font-weight: normal;
     font-size: 1em;
 }
+
+.likes-container {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #ccc;
+}
+
+.like-btn {
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    background: #e91e63;
+    transform: scale(1.1);
+}
+
+.like-btn.liked {
+    background: #e91e63;
+    color: white;
+    cursor: not-allowed;
+}
+
+.like-btn:disabled {
+    opacity: 0.7;
+}
