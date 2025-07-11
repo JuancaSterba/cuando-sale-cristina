@@ -7,6 +7,7 @@ require_once 'config.php';
 // lo que significa que es segura incluso si muchas personas dan like al mismo tiempo.
 $likeId = 1;
 $user_ip = $_SERVER['REMOTE_ADDR'];
+$hashed_ip = hash('sha256', $user_ip . IP_HASH_SALT); // Creamos el hash seguro
 
 // Usamos una transacción para asegurar que ambas operaciones (actualizar y leer) se completen exitosamente.
 $conn->begin_transaction();
@@ -14,7 +15,7 @@ $conn->begin_transaction();
 try {
     // 1. VERIFICAR si la IP ya existe
     $stmt_check = $conn->prepare("SELECT ip_address FROM user_likes WHERE ip_address = ?");
-    $stmt_check->bind_param("s", $user_ip);
+    $stmt_check->bind_param("s", $hashed_ip); // Buscamos por el hash
     $stmt_check->execute();
     $result_check = $stmt_check->get_result();
 
@@ -35,7 +36,7 @@ try {
 
         // 3. INSERTAR la IP del usuario para que no pueda volver a votar
         $stmt_insert_ip = $conn->prepare("INSERT INTO user_likes (ip_address) VALUES (?)");
-        $stmt_insert_ip->bind_param("s", $user_ip);
+        $stmt_insert_ip->bind_param("s", $hashed_ip); // Guardamos el hash
         $stmt_insert_ip->execute();
 
         // 4. OBTENER el nuevo valor del contador

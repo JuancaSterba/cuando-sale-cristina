@@ -14,11 +14,12 @@ $stmt->execute();
 $result = $stmt->get_result();
  
 // Verificamos si el usuario actual ya ha dado like
-$user_ip = $_SERVER['REMOTE_ADDR'];
+$user_ip = $_SERVER['REMOTE_ADDR']; // Obtenemos la IP real
+$hashed_ip = hash('sha256', $user_ip . IP_HASH_SALT); // Creamos el hash seguro
 $user_has_liked = false;
 
 $stmt_check = $conn->prepare("SELECT ip_address FROM user_likes WHERE ip_address = ?");
-$stmt_check->bind_param("s", $user_ip);
+$stmt_check->bind_param("s", $hashed_ip); // Buscamos por el hash, no por la IP
 $stmt_check->execute();
 $result_check = $stmt_check->get_result();
 if ($result_check->num_rows > 0) {
