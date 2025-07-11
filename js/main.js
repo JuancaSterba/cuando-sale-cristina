@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // --- INICIO: Lógica del contador ---
     const countdownContainer = document.getElementById('countdown');
     const messageElement = document.getElementById('countdown-message');
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function updateAndAnimate(element, newValue) {
             // Salir si el elemento no existe en la página
             if (!element) return;
-            
+
             const formattedValue = String(newValue).padStart(2, '0');
             if (element.textContent !== formattedValue) {
                 element.textContent = formattedValue;
@@ -137,4 +137,64 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.backgroundColor = backgroundColors[colorIndex];
     }, 20000); // Cambia de color cada 20 segundos para un efecto sutil
     // --- FIN: Lógica de fondo dinámico ---
+
+    // --- INICIO: Lógica de Likes ---
+    const likeBtn = document.getElementById('like-btn');
+    const likeCountSpan = document.getElementById('like-count');
+    // La ruta a la carpeta donde están tus archivos PHP
+    const likeApiUrl = './api/';
+
+    // Función para obtener el contador inicial de likes
+    async function getInitialLikes() {
+        try {
+            const response = await fetch(`${likeApiUrl}get_count.php`);
+            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+            const data = await response.json();
+            if (data.success) {
+                likeCountSpan.textContent = data.count.toLocaleString('es');
+            }
+        } catch (error) {
+            console.error("Error al obtener los likes:", error);
+        }
+    }
+
+    // Función para enviar un like
+    async function handleLike() {
+        // Deshabilitamos el botón para evitar clics múltiples
+        likeBtn.disabled = true;
+        likeBtn.classList.add('liked');
+
+        try {
+            const response = await fetch(`${likeApiUrl}increment_count.php`, {
+                method: 'POST',
+            });
+            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+            const data = await response.json();
+            if (data.success) {
+                likeCountSpan.textContent = data.count.toLocaleString('es');
+                // Guardamos en el navegador que el usuario ya dio like para no dejarle dar de nuevo
+                localStorage.setItem('userHasLiked', 'true');
+            }
+        } catch (error) {
+            console.error("Error al enviar el like:", error);
+            // Si algo falla, volvemos a habilitar el botón
+            likeBtn.disabled = false;
+            likeBtn.classList.remove('liked');
+        }
+    }
+
+    // Verificamos si el usuario ya dio like en una visita anterior
+    if (localStorage.getItem('userHasLiked') === 'true') {
+        likeBtn.disabled = true;
+        likeBtn.classList.add('liked');
+    } else {
+        likeBtn.addEventListener('click', handleLike);
+    }
+
+    // Cargamos el contador de likes al iniciar
+    getInitialLikes();
+    // --- FIN: Lógica de Likes ---
+
 });
