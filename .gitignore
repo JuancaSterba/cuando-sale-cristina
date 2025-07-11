@@ -1,9 +1,10 @@
+# Archivo de configuración con credenciales. ¡NUNCA SUBIR!
+api/config.php
+
 # Archivos de configuración local que pueden contener secretos.
-# Por ejemplo, si creas un archivo para tus credenciales de DB.
-config.php
 *.env
 
-# Archivos del sistema operativo
+# Archivos de sistema operativo
 .DS_Store
 Thumbs.db
 
@@ -15,5 +16,3 @@ Thumbs.db
 node_modules/
 npm-debug.log
 
-# Archivo de configuración con credenciales. ¡NUNCA SUBIR!
-api/config.php
